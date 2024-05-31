@@ -18,18 +18,18 @@ class AnalogClock(tk.Canvas):
         self.second_hand_length = self.radius * 0.9
         self.current_time = datetime.now(self.timezone)
         self.ampm_mode = False  # Default to 24-hour mode
-        self.summer_mode = False  # Default to 24-hour mode
+        self.summer_mode = False  # Default to summer_mode
         self.create_clock_face()
         self.update_clock()
         
     def create_clock_face(self):
         self.delete('all')
-        self.create_oval(5, 5, self.width-5, self.height-5, outline='black', width=2)
+        self.create_oval(5, 5, self.width-5, self.height-5, outline='red', width=2)
         for i in range(12):
-            angle = math.pi/2 - i*(math.pi/6)
+            angle = math.pi / 2 - i * (math.pi / 6)
             x = self.center[0] + self.radius * 0.9 * math.cos(angle)
             y = self.center[1] - self.radius * 0.9 * math.sin(angle)
-            self.create_text(x, y, text=str(i if self.ampm_mode else i*2), font=('Arial', 10, 'bold'))
+            self.create_text(x, y, text=str(i if self.ampm_mode else i * 2),fill="red",  font=('Arial', 10, 'bold'))
         
     def update_clock(self):
         if self.ampm_mode :
@@ -103,21 +103,11 @@ class ClockApp(tk.Tk):
         self.style_menu.bind("<<ComboboxSelected>>", self.change_style)
 
     def toggle_summer(self):
-        print("2")
-        # if self.clock.ampm_mode == True :
-        #     self.clock.ampm_mode == False
-        # else :
-        #     self.clock.ampm_mode == True
         self.clock.summer_mode = not self.clock.summer_mode
         self.clock.create_clock_face()
         self.clock.update_clock()
 
     def toggle_ampm(self):
-        print("1")
-        # if self.clock.ampm_mode == True :
-        #     self.clock.ampm_mode == False
-        # else :
-        #     self.clock.ampm_mode == True
         self.clock.ampm_mode = not self.clock.ampm_mode
         self.clock.create_clock_face()
         self.clock.update_clock()
@@ -129,19 +119,17 @@ class ClockApp(tk.Tk):
 
     def change_style(self, event):
         style = self.style_var.get()
-        if style == 'dark':
-            self.configure(bg='black')
-            self.clock.configure(bg='black')
-            self.clock.create_clock_face()
-        elif style == 'light':
-            self.configure(bg='white')
-            self.clock.configure(bg='white')
-            self.clock.create_clock_face()
-        else:
-            self.configure(bg='systemWindowBody')
-            self.clock.configure(bg='systemWindowBody')
-            self.clock.create_clock_face()
 
+        if style == 'dark':
+            bg_color = 'black'
+        elif style == 'light':
+            bg_color = 'white'
+        else:
+            bg_color = 'systemWindowBody'
+
+        self.configure(bg=bg_color)
+        self.clock.configure(bg=bg_color)
+        self.clock.create_clock_face()
 if __name__ == "__main__":
     app = ClockApp()
     app.mainloop()
